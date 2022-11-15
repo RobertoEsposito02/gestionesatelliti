@@ -21,8 +21,8 @@
             <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
             <ul class="dropdown-menu" aria-labelledby="dropdown07">
               <li><a class="dropdown-item" href="${pageContext.request.contextPath}/home">Home</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/impiegato/search">Ricerca Impiegati</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/impiegato/insert">Inserisci Impiegato</a></li>
+              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/satellite/search">Ricerca Satellite</a></li>
+              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/satellite/insert">Inserisci Satellite</a></li>
             </ul> 
           </li>   
         </ul>
