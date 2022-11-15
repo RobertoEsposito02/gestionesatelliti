@@ -222,4 +222,20 @@ public class SatelliteController {
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/satellite"; 
 	}
+	
+	@GetMapping("/cercaQuelliDisattivatiNonAncoraRientrati")
+	public String cercaQuelliDisattivatiNonAncoraRientrati(ModelMap model) {
+		Date data=null;
+		model.addAttribute("todayDate_attr", new Date());
+		model.addAttribute("satellite_list_attribute", satelliteService.cercaQuelliDisattivatiAncoraNonRientrati(StatoSatellite.DISABILITATO,data));
+		return "satellite/list";
+	}
+	
+	@GetMapping("/cercaQuelliDaDueAnniInOrbitaNonDisattivati")
+	public String cercaQuelliDaDueAnniInOrbitaNonDisattivati(ModelMap model) {
+		Date data=null;
+		model.addAttribute("todayDate_attr", new Date());
+		model.addAttribute("satellite_list_attribute", satelliteService.cercaQuelliDaDueAnniInOrbitaNonDisattivati());
+		return "satellite/list";
+	}
 }

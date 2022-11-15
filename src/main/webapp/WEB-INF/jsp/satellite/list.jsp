@@ -67,7 +67,9 @@
 												<a class="btn  btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/satellite/show/${satelliteItem.id }">Visualizza</a>
 												<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/satellite/update/${satelliteItem.id }">Edit</a>
 												
-												<c:if test="${satelliteItem.dataLancio.before(todayDate_attr) and satelliteItem.dataRientro.before(todayDate_attr)}">
+												<c:if test="${ satelliteItem.dataLancio.before(todayDate_attr) and satelliteItem.dataRientro.before(todayDate_attr)
+															or satelliteItem.dataLancio == null and satelliteItem.dataRientro == null
+															or satelliteItem.dataLancio.after(todayDate_attr)}">
 													<a class="btn btn-outline-danger btn-sm" href="${pageContext.request.contextPath}/satellite/delete/${satelliteItem.id }">Delete</a>
 												</c:if>
 												
