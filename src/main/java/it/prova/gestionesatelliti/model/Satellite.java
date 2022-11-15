@@ -19,10 +19,10 @@ public class Satellite {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	@NotBlank(message = "")
+	@NotBlank(message = "{satellite.denominazione.notblank}")
 	@Column(name = "denominazione")
 	private String denominazione;
-	@NotBlank(message = "")
+	@NotBlank(message = "{satellite.codice.notblank}")
 	@Column(name = "codice")
 	private String codice;
 	@Column(name = "datalancio")

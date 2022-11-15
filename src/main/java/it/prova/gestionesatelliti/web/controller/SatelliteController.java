@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -119,4 +120,27 @@ public class SatelliteController {
 		return "redirect:/satellite";
 	}
 
+	@PostMapping("/lounch")
+	public String lounch(@RequestParam(name = "idSatellite") Long idSatellite, ModelMap model) {
+		Satellite satellite = satelliteService.caricaSingoloElemento(idSatellite);
+		satellite.setDataLancio(new Date());
+		satelliteService.aggiorna(satellite);
+		model.addAttribute("satellite_list_attribute", satelliteService.listAll());
+		return "satellite/list";
+	}
+	
+	@PostMapping("/rientro")
+	public String rientro(@RequestParam(name = "idSatellite") Long idSatellite, ModelMap model) {
+		Satellite satellite = satelliteService.caricaSingoloElemento(idSatellite);
+		satellite.setDataRientro(new Date());
+		satelliteService.aggiorna(satellite);
+		model.addAttribute("satellite_list_attribute", satelliteService.listAll());
+		return "satellite/list";
+	}
+	
+	@GetMapping("/update/{idSatellite}")
+	public String update(@PathVariable(required = true) Long idSatellite, Model model) {
+		model.addAttribute("update_satellite_attr", satelliteService.caricaSingoloElemento(idSatellite));
+		return "satellite/update";
+	}
 }
