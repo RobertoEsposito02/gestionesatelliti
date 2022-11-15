@@ -55,7 +55,7 @@
 							<h6 class="card-title">I campi con <span class="text-danger">*</span> sono obbligatori</h6>
 		
 		
-							<form:form modelAttribute="update_satellite_attr" method="post" action="${pageContext.request.contextPath}/impiegato/saveUpdate" class="row g-3" novalidate="novalidate">
+							<form:form modelAttribute="update_satellite_attr" method="post" action="${pageContext.request.contextPath}/satellite/saveUpdate" class="row g-3" novalidate="novalidate">
 							
 							
 								<div class="col-md-6">
@@ -80,7 +80,7 @@
                         			<spring:bind path="dataLancio">
 	                        		<input class="form-control ${status.error ? 'is-invalid' : ''}" id="dataLancio" type="date" placeholder="dd/MM/yy"
 	                            		title="formato : gg/mm/aaaa"  name="dataLancio" required  
-	                            		value="${parsedDate}" ${update_satellite_attr.dataLancio > now?"disabled":""}>
+	                            		value="${parsedDate}" ${update_satellite_attr.dataLancio.before(todayDate_attr)?"disabled":""}>
 		                            </spring:bind>
 	                            	<form:errors  path="dataLancio" cssClass="error_field" />
 								</div>
@@ -91,7 +91,7 @@
                         			<spring:bind path="dataRientro">
 	                        		<input class="form-control ${status.error ? 'is-invalid' : ''}" id="dataRientro" type="date" placeholder="dd/MM/yy"
 	                            		title="formato : gg/mm/aaaa"  name="dataRientro" required 
-	                            		value="${parsedDate}" ${update_satellite_attr.dataRientro.after.now?"disabled":""}>
+	                            		value="${parsedDate}" ${update_satellite_attr.dataRientro.before(todayDate_attr)?"disabled":""}>
 		                            </spring:bind>
 	                            	<form:errors  path="dataRientro" cssClass="error_field" />
 								</div>
