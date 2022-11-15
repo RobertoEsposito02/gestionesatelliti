@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,6 +48,12 @@ public class SatelliteController {
 		List<Satellite> results = satelliteService.findByExample(example);
 		model.addAttribute("satellite_list_attribute", results);
 		return "satellite/list";
+	}
+	
+	@GetMapping("/show/{idSatellite}")
+	public String show(@PathVariable(required = true) Long idSatellite, Model model) {
+		model.addAttribute("show_satellite_attr", satelliteService.caricaSingoloElemento(idSatellite));
+		return "satellite/show";
 	}
 
 	@GetMapping("/insert")

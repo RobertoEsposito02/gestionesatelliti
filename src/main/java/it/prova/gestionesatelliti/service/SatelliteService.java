@@ -7,7 +7,7 @@ import it.prova.gestionesatelliti.model.Satellite;
 public interface SatelliteService {
 	public List<Satellite> listAll();
 	
-	public Satellite findById(Long id);
+	public Satellite caricaSingoloElemento(Long id);
 	
 	public void aggiorna(Satellite satelliteInstance);
 

@@ -27,7 +27,7 @@ public class SatelliteServiceImpl implements SatelliteService{
 
 	@Override
 	@Transactional(readOnly = true)
-	public Satellite findById(Long id) {
+	public Satellite caricaSingoloElemento(Long id) {
 		return satelliteRepository.findById(id).orElse(null);
 	}
 
