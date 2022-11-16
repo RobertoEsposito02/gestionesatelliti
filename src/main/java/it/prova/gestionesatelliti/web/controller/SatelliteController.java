@@ -167,9 +167,15 @@ public class SatelliteController {
 	public String saveUpdate(@Valid @ModelAttribute("update_satellite_attr") Satellite satellite, BindingResult result,
 			RedirectAttributes redirectAttrs, @RequestParam(name = "dataLancio") Date dataLancio) {
 	
-		satellite.setDataLancio(dataLancio);
-		satelliteService.aggiorna(satellite);
 			
+		if (result.hasErrors())
+			return "satellite/update";
+		
+		//Satellite satellite2 = satelliteService.caricaSingoloElemento(satellite.getId());
+		//satellite.setDataLancio(satellite2.getDataLancio());
+		
+		//satellite.setDataLancio(dataLancio);
+		//satelliteService.aggiorna(satellite);
 		
 		/* controllo se la data di lancio e dopo quella di ritorno */
 		if (satellite.getDataLancio() != null && satellite.getDataRientro() != null
@@ -209,9 +215,6 @@ public class SatelliteController {
 			return "satellite/update";
 		}
 		
-		if (result.hasErrors())
-			return "satellite/update";
-		
 		satelliteService.aggiorna(satellite);
 		
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
@@ -238,5 +241,29 @@ public class SatelliteController {
 		model.addAttribute("todayDate_attr", new Date());
 		model.addAttribute("satellite_list_attribute", satelliteService.cercaQuelliDaAlmenoDieciAnniInOrbitaCheOraSonoFissi());
 		return "satellite/list";
+	}
+	
+	@GetMapping("/disabilita")
+	public String disabilita(Model model){
+		model.addAttribute("listAll_attr", satelliteService.listAll());
+		model.addAttribute("satellitiDisabilitati_attr", satelliteService.cercaQuelliNonDisabilitatiAncoraNonRientrati());
+		return "satellite/disabilita";
+	}
+	
+	@PostMapping("/confermaDisabilita")
+	public String confermaDisabilita(
+			RedirectAttributes redirectAttrs, Model model) {
+		//Satellite satellite = satelliteService.caricaSingoloElemento(idSatellite);
+		for(Satellite satelliteItem : satelliteService.cercaQuelliNonDisabilitatiAncoraNonRientrati()) {
+			
+			if(satelliteItem.getDataLancio() != null) {
+				satelliteItem.setDataRientro(new Date());
+				satelliteItem.setStato(StatoSatellite.DISABILITATO);
+				satelliteService.aggiorna(satelliteItem);
+			}
+		}
+		
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/home";
 	}
 }

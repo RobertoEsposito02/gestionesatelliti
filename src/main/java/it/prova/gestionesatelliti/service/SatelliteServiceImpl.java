@@ -87,4 +87,9 @@ public class SatelliteServiceImpl implements SatelliteService{
 		return satelliteRepository.findByDataLancioGretherThan10AndStatoFisso();
 	}
 
+	@Override
+	public List<Satellite> cercaQuelliNonDisabilitatiAncoraNonRientrati() {
+		return satelliteRepository.findByDataRitornoNullAndStatoNotDisabilitato();
+	}
+
 }
