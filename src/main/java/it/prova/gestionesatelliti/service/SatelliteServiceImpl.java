@@ -82,4 +82,9 @@ public class SatelliteServiceImpl implements SatelliteService{
 		return satelliteRepository.findByYearDataRientroMinusCurdateGreaterThan();
 	}
 
+	@Override
+	public List<Satellite> cercaQuelliDaAlmenoDieciAnniInOrbitaCheOraSonoFissi() {
+		return satelliteRepository.findByDataLancioGretherThan10AndStatoFisso();
+	}
+
 }

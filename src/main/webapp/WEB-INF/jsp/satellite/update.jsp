@@ -79,8 +79,9 @@
 									<label for="dataLancio" class="form-label">Data di Lancio </label>
                         			<spring:bind path="dataLancio">
 	                        		<input class="form-control ${status.error ? 'is-invalid' : ''}" id="dataLancio" type="date" placeholder="dd/MM/yy"
-	                            		title="formato : gg/mm/aaaa"  name="dataLancio" required  
-	                            		value="${parsedDate}" ${update_satellite_attr.dataLancio.before(todayDate_attr)?"disabled":""}>
+	                            		title="formato : gg/mm/aaaa"  name="dataLancio" required 
+	                            		value="${parsedDate}" ${update_satellite_attr.dataLancio.before(todayDate_attr)?"readonly":""}>
+	                            		<input type="hidden" value="${update_satellite_attr.dataLancio }" name="dataLancio">
 		                            </spring:bind>
 	                            	<form:errors  path="dataLancio" cssClass="error_field" />
 								</div>
@@ -91,7 +92,7 @@
                         			<spring:bind path="dataRientro">
 	                        		<input class="form-control ${status.error ? 'is-invalid' : ''}" id="dataRientro" type="date" placeholder="dd/MM/yy"
 	                            		title="formato : gg/mm/aaaa"  name="dataRientro" required 
-	                            		value="${parsedDate}" ${update_satellite_attr.dataRientro.before(todayDate_attr)?"disabled":""}>
+	                            		value="${parsedDate}" ${update_satellite_attr.dataRientro.before(todayDate_attr)?"readonly":""}>
 		                            </spring:bind>
 	                            	<form:errors  path="dataRientro" cssClass="error_field" />
 								</div>

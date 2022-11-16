@@ -22,4 +22,6 @@ public interface SatelliteService {
 	public List<Satellite> cercaQuelliDaDueAnniInOrbitaNonDisattivati();	
 	
 	public List<Satellite> cercaQuelliDisattivatiAncoraNonRientrati(StatoSatellite stato,Date dataRieentro);
+	
+	public List<Satellite> cercaQuelliDaAlmenoDieciAnniInOrbitaCheOraSonoFissi();
 }

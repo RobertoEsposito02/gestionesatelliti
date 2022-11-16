@@ -68,49 +68,43 @@ public class SatelliteController {
 
 	@PostMapping("/save")
 	public String save(@Valid @ModelAttribute("satellite_insert_attr") Satellite satellite, BindingResult result,
-			RedirectAttributes redirectAttrs, Model model) {
+			RedirectAttributes redirectAttrs) {
 
 		/* controllo se la data di lancio e dopo quella di ritorno */
 		if (satellite.getDataLancio() != null && satellite.getDataRientro() != null
 				&& satellite.getDataLancio().after(satellite.getDataRientro())) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, NON SI PUO INSERIRE UNA DATA DI RIENTRO PRECEDENTE A QUELLA DI LANCIO");
+			result.rejectValue("dataLancio", "error.dataLancio.dataMaggioreDiDataRientro");
 			return "satellite/insert";
 		}
 
 		/* controllo se la data di rientro e stata inserita ma quella di lancio no */
 		if (satellite.getDataRientro() != null && satellite.getDataLancio() == null) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, NON SI PUO INSERIRE UNA DATA DI RIENTRO SENZA PRIMA INSERIRE QUELLA DI LANCIO");
+			result.rejectValue("dataRientro", "error.dataRientro.notNullButDataLancioNull");
 			return "satellite/insert";
 		}
 
 		/* controllo se sono state inserite entrambe le date e sono precedenti ad adesso ma lo stato è diverso da disabilitato */
 		if (satellite.getDataLancio() != null && satellite.getDataRientro() != null && satellite.getDataLancio().before(new Date())
 				&& satellite.getDataRientro().before(new Date()) && (satellite.getStato() == null || satellite.getStato() != StatoSatellite.DISABILITATO)) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, LO STATO DEVE ESSERE \"DISABILITATO\" SE SI INSERISCE SIA LA DATA DI LANCIO CHE DI RIENTRO");
+			result.rejectValue("stato", "error.stato.nonDisabilitatoConDateEntrambePassate");
 			return "satellite/insert";
 		}
 
 		/* controllo se non ho inserito date ma ho inserito uno stato */
 		if(satellite.getDataLancio() == null && satellite.getDataRientro() == null && satellite.getStato() != null) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, NON SI PUO INSERIRE UNO STATO SE NON SI INSERISCE PRIMA ALMENO LA DATA DI LANCIO");
+			result.rejectValue("stato", "error.stato.inseritoMaDateNo");
 			return "satellite/insert";
 		}
 		
 		/* controllo se ho inserito una data di lancio che è precedente ad adesso ma non ho inserito uno stato */
 		if(satellite.getDataLancio() != null && satellite.getDataLancio().before(new Date()) && satellite.getStato() == null) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, BISOGNA INSERIRE UNO STATO SE IL SATELLITE E' GIA STATO LANCIATO");
+			result.rejectValue("stato", "error.stato.nonInseritoMaDataLancioInseritaPassata");
 			return "satellite/insert";
 		}
 		
 		/* controllo se la data di lancio inserita è dopo adesso ma lo stato è diverso da null */
 		if(satellite.getDataLancio() != null && satellite.getDataLancio().after(new Date()) && satellite.getStato() != null) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, NON SI PUO INSERIRE UNO STATO SE LA DATA DI LANCIO DEVE ANCORA VENIRE");
+			result.rejectValue("stato", "error.stato.inseritoMaDataLancioInseritaFutura");
 			return "satellite/insert";
 		}
 
@@ -171,51 +165,52 @@ public class SatelliteController {
 	
 	@PostMapping("/saveUpdate")
 	public String saveUpdate(@Valid @ModelAttribute("update_satellite_attr") Satellite satellite, BindingResult result,
-			RedirectAttributes redirectAttrs, Model model) {
+			RedirectAttributes redirectAttrs, @RequestParam(name = "dataLancio") Date dataLancio) {
+	
+		satellite.setDataLancio(dataLancio);
+		satelliteService.aggiorna(satellite);
+			
 		
 		/* controllo se la data di lancio e dopo quella di ritorno */
 		if (satellite.getDataLancio() != null && satellite.getDataRientro() != null
 				&& satellite.getDataLancio().after(satellite.getDataRientro())) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, NON SI PUO INSERIRE UNA DATA DI RIENTRO PRECEDENTE A QUELLA DI LANCIO");
+			result.rejectValue("dataLancio", "error.dataLancio.dataMaggioreDiDataRientro");
 			return "satellite/update";
 		}
 
 		/* controllo se la data di rientro e stata inserita ma quella di lancio no */
 		if (satellite.getDataRientro() != null && satellite.getDataLancio() == null) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, NON SI PUO INSERIRE UNA DATA DI RIENTRO SENZA PRIMA INSERIRE QUELLA DI LANCIO");
+			result.rejectValue("dataRientro", "error.dataRientro.notNullButDataLancioNull");
 			return "satellite/update";
 		}
 
 		/* controllo se sono state inserite entrambe le date e sono precedenti ad adesso ma lo stato è diverso da disabilitato */
 		if (satellite.getDataLancio() != null && satellite.getDataRientro() != null && satellite.getDataLancio().before(new Date())
 				&& satellite.getDataRientro().before(new Date()) && (satellite.getStato() == null || satellite.getStato() != StatoSatellite.DISABILITATO)) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, LO STATO DEVE ESSERE \"DISABILITATO\" SE SI INSERISCE SIA LA DATA DI LANCIO CHE DI RIENTRO");
+			result.rejectValue("stato", "error.stato.nonDisabilitatoConDateEntrambePassate");
 			return "satellite/update";
 		}
 
 		/* controllo se non ho inserito date ma ho inserito uno stato */
 		if(satellite.getDataLancio() == null && satellite.getDataRientro() == null && satellite.getStato() != null) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, NON SI PUO INSERIRE UNO STATO SE NON SI INSERISCE PRIMA ALMENO LA DATA DI LANCIO");
+			result.rejectValue("stato", "error.stato.inseritoMaDateNo");
 			return "satellite/update";
 		}
 		
 		/* controllo se ho inserito una data di lancio che è precedente ad adesso ma non ho inserito uno stato */
 		if(satellite.getDataLancio() != null && satellite.getDataLancio().before(new Date()) && satellite.getStato() == null) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, BISOGNA INSERIRE UNO STATO SE IL SATELLITE E' GIA STATO LANCIATO");
+			result.rejectValue("stato", "error.stato.nonInseritoMaDataLancioInseritaPassata");
 			return "satellite/update";
 		}
 		
 		/* controllo se la data di lancio inserita è dopo adesso ma lo stato è diverso da null */
 		if(satellite.getDataLancio() != null && satellite.getDataLancio().after(new Date()) && satellite.getStato() != null) {
-			model.addAttribute("errorMessage",
-					"ATTENZIONE, NON SI PUO INSERIRE UNO STATO SE LA DATA DI LANCIO DEVE ANCORA VENIRE");
+			result.rejectValue("stato", "error.stato.inseritoMaDataLancioInseritaFutura");
 			return "satellite/update";
 		}
+		
+		if (result.hasErrors())
+			return "satellite/update";
 		
 		satelliteService.aggiorna(satellite);
 		
@@ -233,9 +228,15 @@ public class SatelliteController {
 	
 	@GetMapping("/cercaQuelliDaDueAnniInOrbitaNonDisattivati")
 	public String cercaQuelliDaDueAnniInOrbitaNonDisattivati(ModelMap model) {
-		Date data=null;
 		model.addAttribute("todayDate_attr", new Date());
 		model.addAttribute("satellite_list_attribute", satelliteService.cercaQuelliDaDueAnniInOrbitaNonDisattivati());
+		return "satellite/list";
+	}
+	
+	@GetMapping("/cercaQuelliDaAlmenoDieciAnniInOrbitaCheOraSonoFissi")
+	public String cercaQuelliDaAlmenoDieciAnniInOrbitaCheOraSonoFissi(ModelMap model) {
+		model.addAttribute("todayDate_attr", new Date());
+		model.addAttribute("satellite_list_attribute", satelliteService.cercaQuelliDaAlmenoDieciAnniInOrbitaCheOraSonoFissi());
 		return "satellite/list";
 	}
 }
